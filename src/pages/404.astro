@@ -1,0 +1,19 @@
+---
+import Base from '../layouts/Base.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<Base title="Página no encontrada — URBANUS QHSE" noindex>
+  <Header />
+  <main class="wrap grid min-h-[55vh] place-content-center py-20 text-center">
+    <span class="kicker">Error 404</span>
+    <h1 class="text-3xl">No encontramos esa página</h1>
+    <p class="mt-3 text-ink-soft">Puede volver al inicio o escribirnos su consulta.</p>
+    <div class="mt-7 flex flex-wrap justify-center gap-3">
+      <a href="/" class="btn btn-solid">Volver al inicio</a>
+      <a href="/#contacto-form" class="btn border-line text-navy-900 hover:bg-sky-50">Contacto</a>
+    </div>
+  </main>
+  <Footer />
+</Base>

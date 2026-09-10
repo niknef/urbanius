@@ -1,0 +1,27 @@
+---
+import { pasos } from '../data/metodologia';
+import SectionHead from './SectionHead.astro';
+---
+
+<section id="metodologia" class="py-16 sm:py-22">
+  <div class="wrap reveal">
+    <SectionHead
+      kicker="Cómo trabajamos"
+      title="Un esquema de trabajo trazable, de la primera visita a la auditoría."
+      text="El mismo método en obra, en planta y en oficina: relevar, priorizar, ejecutar y medir."
+    />
+
+    <ol class="grid gap-px bg-line md:grid-cols-2 lg:grid-cols-4">
+      {
+        pasos.map((paso) => (
+          <li class="group relative bg-white p-7 transition-colors hover:bg-sky-50">
+            <span class="font-display text-[13px] font-semibold text-sky-400">{paso.num}</span>
+            <h3 class="mt-2 text-[17px] font-semibold">{paso.title}</h3>
+            <p class="mt-2.5 text-[14px] text-ink-soft">{paso.text}</p>
+            <span class="absolute bottom-0 left-0 h-0.5 w-0 bg-blue-600 transition-all duration-300 group-hover:w-full" aria-hidden="true" />
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>

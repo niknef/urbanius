@@ -1,0 +1,121 @@
+---
+import { site, nav, contact, whatsappHref } from '../data/site';
+import Icon from './Icon.astro';
+---
+
+<header
+  id="site-header"
+  class="sticky top-0 z-50 border-b border-white/10 bg-navy-900/95 backdrop-blur transition-shadow duration-300"
+>
+  <div class="wrap flex h-18 items-center justify-between gap-4">
+    <a href="/" class="flex items-center gap-3" aria-label={`${site.name} — inicio`}>
+      <img src={site.logo} alt="" width="40" height="40" class="h-10 w-10" />
+      <span class="font-display text-base leading-tight font-bold text-white">
+        {site.name}
+        <span class="block font-sans text-[11px] font-normal tracking-wide text-sky-400">
+          {site.tagline}
+        </span>
+      </span>
+    </a>
+
+    <nav class="hidden items-center gap-9 lg:flex" aria-label="Principal">
+      {
+        nav.map((item) => (
+          <a
+            href={item.href}
+            class="text-[14.5px] font-medium text-white/85 transition hover:text-white"
+          >
+            {item.label}
+          </a>
+        ))
+      }
+      <a
+        href="#contacto-form"
+        class="rounded-brand border border-sky-400 bg-sky-400 px-5 py-2.5 text-[14.5px] font-semibold text-navy-900 transition hover:bg-transparent hover:text-white"
+      >
+        Solicitar consulta
+      </a>
+    </nav>
+
+    <button
+      type="button"
+      id="menu-toggle"
+      class="-mr-2 grid size-11 place-items-center rounded-brand text-white lg:hidden"
+      aria-label="Abrir menú"
+      aria-expanded="false"
+      aria-controls="mobile-menu"
+    >
+      <span class="grid gap-1.5" aria-hidden="true">
+        <span class="block h-0.5 w-6 bg-white transition-transform duration-200" data-bar="top"></span>
+        <span class="block h-0.5 w-6 bg-white transition-opacity duration-200" data-bar="mid"></span>
+        <span class="block h-0.5 w-6 bg-white transition-transform duration-200" data-bar="bottom"></span>
+      </span>
+    </button>
+  </div>
+
+  <div id="mobile-menu" class="hidden border-t border-white/10 bg-navy-900 lg:hidden">
+    <nav class="wrap grid gap-1 py-4" aria-label="Principal (móvil)">
+      {
+        nav.map((item) => (
+          <a
+            href={item.href}
+            class="rounded-brand px-2 py-3 text-[15px] font-medium text-white/90 transition hover:bg-white/5"
+            data-menu-link
+          >
+            {item.label}
+          </a>
+        ))
+      }
+      <div class="mt-3 grid gap-2.5 border-t border-white/10 pt-4">
+        <a href="#contacto-form" class="btn btn-primary w-full" data-menu-link>Solicitar consulta</a>
+        <a
+          href={whatsappHref()}
+          target="_blank"
+          rel="noopener"
+          class="flex items-center justify-center gap-2 py-2 text-sm text-white/80"
+        >
+          <Icon name="phone" class="size-4 text-sky-400" />
+          {contact.phoneDisplay}
+        </a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<script>
+  const toggle = document.getElementById('menu-toggle')!;
+  const menu = document.getElementById('mobile-menu')!;
+  const header = document.getElementById('site-header')!;
+  const bars = {
+    top: toggle.querySelector<HTMLElement>('[data-bar="top"]')!,
+    mid: toggle.querySelector<HTMLElement>('[data-bar="mid"]')!,
+    bottom: toggle.querySelector<HTMLElement>('[data-bar="bottom"]')!,
+  };
+
+  const setMenu = (open: boolean) => {
+    menu.classList.toggle('hidden', !open);
+    toggle.setAttribute('aria-expanded', String(open));
+    toggle.setAttribute('aria-label', open ? 'Cerrar menú' : 'Abrir menú');
+    bars.top.style.transform = open ? 'translateY(8px) rotate(45deg)' : '';
+    bars.mid.style.opacity = open ? '0' : '';
+    bars.bottom.style.transform = open ? 'translateY(-8px) rotate(-45deg)' : '';
+  };
+
+  toggle.addEventListener('click', () => setMenu(menu.classList.contains('hidden')));
+  menu.querySelectorAll('[data-menu-link]').forEach((link) =>
+    link.addEventListener('click', () => setMenu(false)),
+  );
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !menu.classList.contains('hidden')) {
+      setMenu(false);
+      toggle.focus();
+    }
+  });
+  // vuelve al estado desktop si se agranda la ventana con el menú abierto
+  matchMedia('(min-width: 1024px)').addEventListener('change', (e) => e.matches && setMenu(false));
+
+  // sombra sutil cuando la página deja el tope
+  const onScroll = () => header.classList.toggle('shadow-lg', window.scrollY > 8);
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+</script>

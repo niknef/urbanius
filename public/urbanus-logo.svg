@@ -1,0 +1,11 @@
+<!-- PLACEHOLDER: reemplazar por el logo original de la marca (urbanus-logo.png / .svg).
+     Mantiene el motivo descripto en el brief: ciudad + hoja, paleta azul/celeste. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="URBANUS QHSE">
+  <rect width="64" height="64" rx="6" fill="#0A2A40"/>
+  <g fill="none" stroke="#4FA6D6" stroke-width="2.6" stroke-linecap="square">
+    <path d="M14 48V30l8-5 8 5v18"/>
+    <path d="M30 48V36l8-4 8 4v12"/>
+    <path d="M10 48h44"/>
+  </g>
+  <path d="M44 12c6 0 10 3 10 8s-4 9-10 9c-3 0-5-1-6-2 1-6 6-10 12-11-6 0-9 2-12 5-1-5 2-9 6-9z" fill="#25a06a" opacity=".9"/>
+</svg>

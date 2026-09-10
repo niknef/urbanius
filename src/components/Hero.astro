@@ -1,0 +1,77 @@
+---
+import { site, stats, whatsappHref } from '../data/site';
+import Icon from './Icon.astro';
+---
+
+<section class="relative overflow-hidden bg-linear-to-b from-navy-800 to-navy-900 text-white">
+  <div class="blueprint pointer-events-none absolute inset-0" aria-hidden="true"></div>
+  <div
+    class="pointer-events-none absolute -top-40 -right-40 size-[520px] rounded-full bg-sky-400/10 blur-3xl"
+    aria-hidden="true"
+  >
+  </div>
+
+  <div
+    class="wrap relative grid items-center gap-14 py-20 lg:grid-cols-[1.1fr_.9fr] lg:py-24"
+    id="contenido"
+  >
+    <div>
+      <span class="mb-5 flex items-center gap-2.5 text-[13px] font-semibold text-sky-400">
+        <span class="h-px w-7 bg-sky-400"></span>
+        Consultoría QHSE estratégica y operativa
+      </span>
+
+      <h1 class="max-w-xl text-[clamp(2rem,5vw,2.75rem)] leading-[1.12] font-bold text-white">
+        Ingeniería preventiva para empresas e industrias de alta complejidad.
+      </h1>
+
+      <p class="mt-5 max-w-lg text-[17px] text-[#CFE3F0]">
+        Acompañamos a organizaciones exigentes a mitigar riesgos, proteger a las personas y asegurar
+        el cumplimiento legal, garantizando la continuidad del negocio.
+      </p>
+
+      <p class="mt-7 max-w-md border-l-2 border-sky-400 pl-4.5 text-[15.5px] text-[#B9D3E5]">
+        Soluciones integrales de ingeniería preventiva y gestión normativo-operativa para empresas e
+        industrias de alta complejidad.
+      </p>
+
+      <div class="mt-9 flex flex-wrap gap-3.5">
+        <a href="#contacto-form" class="btn btn-primary">Solicitar consulta</a>
+        <a href="#servicios" class="btn btn-outline">Ver módulos de servicio</a>
+      </div>
+
+      <p class="mt-7 flex flex-wrap items-center gap-x-6 gap-y-2 text-[13px] text-[#8FAEC2]">
+        <span class="inline-flex items-center gap-2">
+          <Icon name="shield" class="size-4 text-sky-400" /> Dirección técnica matriculada
+        </span>
+        <span class="inline-flex items-center gap-2">
+          <Icon name="check" class="size-4 text-sky-400" /> Instrumental calibrado y certificado
+        </span>
+        <a href={whatsappHref()} target="_blank" rel="noopener" class="inline-flex items-center gap-2 hover:text-white">
+          <Icon name="phone" class="size-4 text-sky-400" /> Respuesta en el día
+        </a>
+      </p>
+    </div>
+
+    <div class="rounded-brand border border-white/15 bg-white/5 p-7 backdrop-blur-[2px]">
+      <img src={site.logo} alt={site.name} width="88" height="88" class="mb-5 h-22 w-22" />
+      <p class="text-sm text-[#CFE3F0]">
+        Dirección técnica a cargo de un Licenciado en Higiene y Seguridad con más de dos décadas en
+        proyectos de generación eléctrica e industrias de alta complejidad.
+      </p>
+      <dl class="mt-5 flex border-t border-white/15 pt-4.5">
+        {
+          stats.map((s, i) => (
+            <div class={`flex-1 ${i > 0 ? 'border-l border-white/15 pl-4.5' : ''}`}>
+              <dt class="sr-only">{s.label}</dt>
+              <dd>
+                <b class="block font-display text-2xl text-sky-400">{s.value}</b>
+                <span class="text-[12.5px] text-[#B9D3E5]">{s.label}</span>
+              </dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+  </div>
+</section>

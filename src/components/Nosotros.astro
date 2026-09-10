@@ -1,0 +1,61 @@
+---
+import { sectores } from '../data/sectores';
+import { contact } from '../data/site';
+import Icon from './Icon.astro';
+---
+
+<section id="nosotros" class="bg-sky-50 py-16 sm:py-22">
+  <div class="wrap reveal grid items-start gap-12 lg:grid-cols-2 lg:gap-16">
+    <div>
+      <span class="kicker">Quiénes somos</span>
+      <h2 class="mb-5 text-[clamp(1.55rem,3.4vw,2rem)] leading-tight">
+        Dirección técnica y trayectoria
+      </h2>
+      <div class="grid gap-4 text-[15.5px] text-ink-soft">
+        <p>
+          Más de 22 años liderando el servicio de Higiene y Seguridad corporativa en proyectos de
+          generación eléctrica, energías renovables e industrias de alta complejidad.
+        </p>
+        <p>
+          Brindamos soluciones integrales en Seguridad, Salud Ocupacional, Gestión Ambiental y
+          Sistemas de Gestión para empresas que buscan reducir riesgos y cumplir con los más altos
+          estándares.
+        </p>
+        <p>
+          Nuestra misión es ayudar a las organizaciones a proteger a las personas, garantizar el
+          cumplimiento legal y mejorar continuamente sus procesos, mediante un servicio técnico de
+          excelencia, innovación y compromiso.
+        </p>
+      </div>
+
+      <div class="mt-6 flex items-center gap-4 border-t border-line pt-6">
+        <span class="grid size-11 shrink-0 place-items-center rounded-brand bg-sky-100 text-blue-600">
+          <Icon name="user" class="size-5" />
+        </span>
+        <div>
+          <b class="block font-display text-[15.5px] text-navy-900">{contact.lead.name}</b>
+          <span class="text-[13.5px] text-ink-soft">{contact.lead.role} — URBANUS QHSE</span>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <span class="kicker mb-4">Sectores de cobertura</span>
+      <ul class="grid gap-px border border-line bg-line">
+        {
+          sectores.map((s) => (
+            <li class="flex items-start gap-4 bg-white p-5 transition-colors hover:bg-sky-50">
+              <span class="grid size-8.5 shrink-0 place-items-center rounded-brand bg-sky-100 text-blue-600">
+                <Icon name={s.icon} class="size-4.5" />
+              </span>
+              <div>
+                <h3 class="text-[14.5px] font-semibold">{s.title}</h3>
+                <p class="mt-1 text-[13.5px] text-ink-soft">{s.text}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+</section>

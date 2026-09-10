@@ -1,0 +1,118 @@
+---
+import LeadForm from './LeadForm.astro';
+import { whatsappHref } from '../data/site';
+---
+
+<!-- Pestaña lateral: consulta rápida -->
+<button
+  type="button"
+  id="quick-tab"
+  class="fixed top-1/2 right-0 z-50 hidden -translate-y-1/2 rounded-l-md bg-navy-800 px-3 py-4 text-[13px] font-semibold tracking-wide text-white shadow-[-4px_0_14px_rgba(0,0,0,.15)] transition hover:bg-navy-700 md:block"
+  style="writing-mode: vertical-rl;"
+  aria-haspopup="dialog"
+  aria-expanded="false"
+  aria-controls="quick-panel"
+>
+  Consulta rápida
+</button>
+
+<div
+  id="quick-overlay"
+  class="pointer-events-none fixed inset-0 z-60 bg-navy-900/40 opacity-0 transition-opacity duration-250"
+></div>
+
+<div
+  id="quick-panel"
+  class="fixed inset-y-0 right-0 z-70 w-[min(21.25rem,88vw)] translate-x-full overflow-y-auto bg-white p-8 shadow-[-12px_0_32px_rgba(0,0,0,.18)] transition-transform duration-300 ease-[cubic-bezier(.16,1,.3,1)]"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="quick-panel-title"
+  aria-hidden="true"
+  inert
+>
+  <button
+    type="button"
+    id="quick-close"
+    class="absolute top-4 right-4 grid size-9 place-items-center rounded-brand text-2xl leading-none text-ink-soft transition hover:bg-sky-50 hover:text-navy-900"
+    aria-label="Cerrar"
+  >
+    &times;
+  </button>
+
+  <h2 id="quick-panel-title" class="mt-2 mb-1.5 text-[19px]">Consulta rápida</h2>
+  <p class="mb-6 text-[13.5px] text-ink-soft">Complete estos datos y lo contactamos en el día.</p>
+
+  <LeadForm variant="compact" idPrefix="q-" origen="panel-flotante" />
+</div>
+
+<!-- WhatsApp flotante (única excepción a la paleta, por reconocibilidad) -->
+<a
+  class="fixed right-5 bottom-5 z-50 grid size-14 place-items-center rounded-full bg-wpp shadow-[0_8px_20px_rgba(0,0,0,.25)] transition hover:scale-105"
+  href={whatsappHref()}
+  target="_blank"
+  rel="noopener"
+  aria-label="Escribir por WhatsApp"
+>
+  <svg viewBox="0 0 24 24" class="size-7 fill-white" aria-hidden="true">
+    <path
+      d="M17.5 14.4c-.3-.1-1.7-.9-2-1-.3-.1-.5-.1-.7.1-.2.3-.8 1-.9 1.2-.2.2-.3.2-.6.1-.3-.1-1.2-.5-2.3-1.5-.9-.8-1.4-1.7-1.6-2-.2-.3 0-.5.1-.6.1-.1.3-.3.4-.5.1-.2.2-.3.3-.5.1-.2 0-.4 0-.5C10.1 8.9 9.6 7.7 9.4 7.2c-.2-.5-.4-.4-.5-.4h-.5c-.2 0-.5.1-.7.3-.2.3-1 1-1 2.4s1 2.8 1.1 3c.1.2 2 3 4.8 4.3.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.5-.1 1.7-.7 2-1.4.2-.7.2-1.2.2-1.4-.1-.1-.3-.2-.6-.3z"
+    ></path>
+    <path
+      d="M12 2a10 10 0 0 0-8.6 15L2 22l5.2-1.4A10 10 0 1 0 12 2zm0 18.2c-1.6 0-3.1-.4-4.5-1.2l-.3-.2-3.1.8.8-3-.2-.3A8.2 8.2 0 1 1 12 20.2z"
+    ></path>
+  </svg>
+</a>
+
+<script>
+  const tab = document.getElementById('quick-tab')!;
+  const panel = document.getElementById('quick-panel')!;
+  const overlay = document.getElementById('quick-overlay')!;
+  const close = document.getElementById('quick-close')!;
+  let lastFocused: HTMLElement | null = null;
+
+  const open = () => {
+    lastFocused = document.activeElement as HTMLElement;
+    panel.classList.remove('translate-x-full');
+    panel.removeAttribute('inert');
+    panel.setAttribute('aria-hidden', 'false');
+    overlay.classList.remove('pointer-events-none', 'opacity-0');
+    tab.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+    panel.querySelector<HTMLInputElement>('input, select, textarea')?.focus();
+  };
+
+  const hide = () => {
+    panel.classList.add('translate-x-full');
+    panel.setAttribute('inert', '');
+    panel.setAttribute('aria-hidden', 'true');
+    overlay.classList.add('pointer-events-none', 'opacity-0');
+    tab.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+    lastFocused?.focus();
+  };
+
+  tab.addEventListener('click', open);
+  overlay.addEventListener('click', hide);
+  close.addEventListener('click', hide);
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && panel.getAttribute('aria-hidden') === 'false') hide();
+  });
+
+  // Foco atrapado dentro del panel mientras está abierto.
+  panel.addEventListener('keydown', (e) => {
+    if (e.key !== 'Tab') return;
+    const focusables = panel.querySelectorAll<HTMLElement>(
+      'a[href], button, input, select, textarea',
+    );
+    const first = focusables[0];
+    const last = focusables[focusables.length - 1];
+    if (!first || !last) return;
+    if (e.shiftKey && document.activeElement === first) {
+      e.preventDefault();
+      last.focus();
+    } else if (!e.shiftKey && document.activeElement === last) {
+      e.preventDefault();
+      first.focus();
+    }
+  });
+</script>

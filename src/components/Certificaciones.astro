@@ -1,0 +1,25 @@
+---
+const normas = [
+  { code: 'ISO 9001', label: 'Calidad' },
+  { code: 'ISO 14001', label: 'Ambiente' },
+  { code: 'ISO 45001', label: 'Seguridad y salud' },
+];
+---
+
+<div class="bg-navy-900 py-11">
+  <div class="wrap flex flex-wrap items-center justify-between gap-6">
+    <span class="text-[13px] font-medium text-[#B9D3E5]">
+      Sistemas de gestión que implementamos y auditamos
+    </span>
+    <ul class="flex flex-wrap gap-3.5">
+      {
+        normas.map((n) => (
+          <li class="rounded-brand border border-white/20 px-4 py-2.5 font-display text-[13.5px] font-semibold text-white">
+            {n.code}
+            <span class="ml-2 font-sans text-[12px] font-normal text-[#8FAEC2]">{n.label}</span>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</div>

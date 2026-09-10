@@ -1,0 +1,75 @@
+---
+import { modulos } from '../data/modulos';
+import SectionHead from './SectionHead.astro';
+---
+
+<section id="servicios" class="bg-sky-50 py-16 sm:py-22">
+  <div class="wrap reveal">
+    <SectionHead
+      kicker="Módulos de servicio"
+      title="Un servicio técnico integral, módulo por módulo."
+      text="Seis áreas de trabajo que cubren todo el ciclo de higiene, seguridad, salud ocupacional, calidad y medio ambiente."
+    />
+
+    <div class="border-t border-line" data-accordion>
+      {
+        modulos.map((mod, i) => (
+          <details class="group border-b border-line" open={i === 0} name="modulo">
+            <summary
+              class="flex cursor-pointer list-none items-center gap-4 py-6 sm:gap-6 [&::-webkit-details-marker]:hidden"
+            >
+              <span class="grid size-9.5 shrink-0 place-items-center rounded-brand bg-navy-900 font-display text-sm font-semibold text-sky-400 transition-colors group-open:bg-blue-600 group-open:text-white">
+                {mod.num}
+              </span>
+              <span class="flex-1">
+                <span data-mod-title class="block font-display text-[17px] font-semibold text-navy-900">
+                  {mod.title}
+                </span>
+                <span class="mt-1 hidden text-[13.5px] text-ink-soft sm:block sm:group-open:hidden">
+                  {mod.summary}
+                </span>
+              </span>
+              <span class="relative size-5.5 shrink-0" aria-hidden="true">
+                <span class="absolute top-1/2 left-1/2 h-0.5 w-3.5 -translate-x-1/2 -translate-y-1/2 bg-blue-600" />
+                <span class="absolute top-1/2 left-1/2 h-3.5 w-0.5 -translate-x-1/2 -translate-y-1/2 bg-blue-600 transition-transform duration-200 group-open:scale-y-0" />
+              </span>
+            </summary>
+
+            <div class="pb-8 pl-0 sm:pl-15">
+              {mod.intro && <p class="mb-3.5 text-[13.5px] text-ink-soft">{mod.intro}</p>}
+              <ul class="grid max-w-3xl gap-2.5">
+                {mod.items.map((item) => (
+                  <li class="relative pl-4.5 text-[14.5px] text-ink-soft">
+                    <span class="absolute top-2.5 left-0 size-1.5 bg-sky-400" aria-hidden="true" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+              <a
+                href="#contacto-form"
+                class="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-blue-600 hover:text-navy-800"
+                data-modulo={mod.slug}
+              >
+                Consultar por este módulo
+                <span aria-hidden="true">→</span>
+              </a>
+            </div>
+          </details>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<script>
+  // Al pedir "consultar por este módulo", precarga el motivo en el formulario.
+  document.querySelectorAll<HTMLAnchorElement>('[data-modulo]').forEach((link) => {
+    link.addEventListener('click', () => {
+      const title = link.closest('details')?.querySelector('[data-mod-title]')?.textContent?.trim();
+      const textarea = document.querySelector<HTMLTextAreaElement>('#comentarios');
+      if (title && textarea && !textarea.value) {
+        textarea.value = `Consulta sobre: ${title}.\n`;
+      }
+    });
+  });
+</script>

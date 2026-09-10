@@ -1,0 +1,118 @@
+---
+import '../styles/global.css';
+import { site, contact } from '../data/site';
+import { modulos } from '../data/modulos';
+
+interface Props {
+  title?: string;
+  description?: string;
+  /** Evita indexar páginas utilitarias (gracias, etc.). */
+  noindex?: boolean;
+}
+
+const {
+  title = `${site.name} — Consultoría Integral en Calidad, Higiene, Seguridad y Medio Ambiente`,
+  description = site.description,
+  noindex = false,
+} = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site ?? site.url).toString();
+const ogImage = new URL(site.ogImage, Astro.site ?? site.url).toString();
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ProfessionalService',
+  name: site.name,
+  description: site.description,
+  url: site.url,
+  image: ogImage,
+  logo: new URL(site.logo, Astro.site ?? site.url).toString(),
+  telephone: contact.phoneE164,
+  email: contact.email,
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: contact.address.street,
+    addressLocality: contact.address.city,
+    addressRegion: contact.address.region,
+    addressCountry: contact.address.country,
+  },
+  areaServed: { '@type': 'Country', name: 'Argentina' },
+  founder: { '@type': 'Person', name: contact.lead.name, jobTitle: contact.lead.role },
+  knowsAbout: [
+    'Higiene y Seguridad en el Trabajo',
+    'Salud Ocupacional',
+    'Gestión Ambiental',
+    'ISO 9001',
+    'ISO 14001',
+    'ISO 45001',
+  ],
+  hasOfferCatalog: {
+    '@type': 'OfferCatalog',
+    name: 'Módulos de servicio',
+    itemListElement: modulos.map((m) => ({
+      '@type': 'Offer',
+      itemOffered: { '@type': 'Service', name: m.title, description: m.summary },
+    })),
+  },
+};
+---
+
+<!doctype html>
+<html lang="es-AR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta name="theme-color" content="#0A2A40" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:locale" content={site.locale} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} is:inline />
+  </head>
+
+  <body>
+    <a
+      href="#contenido"
+      class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-100 focus:rounded-brand focus:bg-white focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-navy-900 focus:shadow-lg"
+    >
+      Saltar al contenido
+    </a>
+    <slot />
+
+    <script>
+      // Revelado suave de secciones al hacer scroll (no bloquea el contenido:
+      // si el observer no está disponible, todo queda visible).
+      const targets = document.querySelectorAll('.reveal');
+      if (!('IntersectionObserver' in window)) {
+        targets.forEach((el) => el.classList.add('is-visible'));
+      } else {
+        const io = new IntersectionObserver(
+          (entries) => {
+            for (const entry of entries) {
+              if (entry.isIntersecting) {
+                entry.target.classList.add('is-visible');
+                io.unobserve(entry.target);
+              }
+            }
+          },
+          { rootMargin: '0px 0px -12% 0px', threshold: 0.05 },
+        );
+        targets.forEach((el) => io.observe(el));
+      }
+    </script>
+  </body>
+</html>

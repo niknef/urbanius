@@ -1,0 +1,152 @@
+@import 'tailwindcss';
+
+@import '@fontsource-variable/inter';
+@import '@fontsource-variable/space-grotesk';
+
+@theme {
+  /* ---- Paleta de marca (azul / celeste / blanco) ---- */
+  --color-navy-900: #0a2a40;
+  --color-navy-800: #0d3a5c;
+  --color-navy-700: #124a73;
+  --color-blue-600: #1d6fa5;
+  --color-sky-400: #4fa6d6;
+  --color-sky-100: #eaf4fb;
+  --color-sky-50: #f5fafd;
+  --color-ink: #132330;
+  --color-ink-soft: #51697a;
+  --color-line: #d7e6ef;
+  --color-wpp: #25d366;
+
+  --font-display: 'Space Grotesk Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-sans: 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
+
+  --radius-brand: 4px;
+
+  --ease-brand: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    /* compensa el header sticky al saltar a un ancla */
+    scroll-padding-top: 5.5rem;
+  }
+
+  body {
+    @apply bg-white font-sans text-ink antialiased;
+    line-height: 1.55;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-display text-navy-900;
+    letter-spacing: -0.01em;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-sky-400);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  ::selection {
+    background: var(--color-sky-400);
+    color: var(--color-navy-900);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer components {
+  .wrap {
+    @apply mx-auto w-full max-w-[1180px] px-5 sm:px-8;
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-brand border border-transparent px-6 py-3.5 text-[14.5px] font-semibold transition duration-150;
+  }
+  .btn-primary {
+    @apply bg-sky-400 text-navy-900 hover:bg-white;
+  }
+  .btn-solid {
+    @apply bg-blue-600 text-white hover:bg-navy-800;
+  }
+  .btn-outline {
+    @apply border-white/35 text-white hover:border-white hover:bg-white/10;
+  }
+
+  .kicker {
+    @apply mb-2.5 block text-[13px] font-semibold text-blue-600;
+  }
+
+  /* --- Campos de formulario --- */
+  .field {
+    @apply grid gap-1.5;
+  }
+  .field > label {
+    @apply text-[12.5px] font-semibold text-navy-900;
+  }
+  .field :is(input, select, textarea) {
+    @apply w-full rounded-brand border border-line bg-white px-3.5 py-3 text-sm text-ink transition;
+  }
+  .field :is(input, select, textarea)::placeholder {
+    @apply text-ink-soft/60;
+  }
+  .field :is(input, select, textarea):focus {
+    @apply border-sky-400 outline-2 outline-offset-1 outline-sky-400;
+  }
+  .field :is(input, select, textarea):user-invalid {
+    @apply border-red-400;
+  }
+  .field .field-error {
+    @apply hidden text-[12px] font-medium text-red-600;
+  }
+  .field :is(input, select, textarea):user-invalid ~ .field-error,
+  form.was-submitted .field :is(input, select, textarea):invalid ~ .field-error {
+    @apply block;
+  }
+  form.was-submitted .field :is(input, select, textarea):invalid {
+    @apply border-red-400;
+  }
+
+  /* --- Animación de entrada por sección --- */
+  .reveal {
+    opacity: 0;
+    transform: translateY(14px);
+    transition:
+      opacity 0.6s var(--ease-brand),
+      transform 0.6s var(--ease-brand);
+  }
+  .reveal.is-visible {
+    opacity: 1;
+    transform: none;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .reveal {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}
+
+@utility blueprint {
+  /* motivo "plano técnico" del hero */
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.9), transparent 75%);
+}
