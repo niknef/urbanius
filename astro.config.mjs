@@ -9,7 +9,12 @@ const SITE = process.env.PUBLIC_SITE_URL ?? 'https://urbanusqhse.com.ar';
 export default defineConfig({
   site: SITE,
   output: 'static',
-  integrations: [sitemap()],
+  integrations: [
+    sitemap({
+      filter: (page) => !page.includes('/404'),
+      serialize: (item) => ({ ...item, lastmod: new Date().toISOString() }),
+    }),
+  ],
   vite: {
     plugins: [tailwindcss()],
   },

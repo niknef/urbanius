@@ -1,4 +1,5 @@
 ---
+import { Image } from 'astro:assets';
 import { modulos } from '../data/modulos';
 import SectionHead from './SectionHead.astro';
 ---
@@ -8,64 +9,144 @@ import SectionHead from './SectionHead.astro';
     <SectionHead
       kicker="Módulos de servicio"
       title="Un servicio técnico integral, módulo por módulo."
-      text="Seis áreas de trabajo que cubren todo el ciclo de higiene, seguridad, salud ocupacional, calidad y medio ambiente."
+      text="Ocho áreas de trabajo que cubren todo el ciclo de higiene, seguridad, salud ocupacional, calidad, medio ambiente y seguros."
     />
 
-    <div class="border-t border-line" data-accordion>
+    <ul class="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
       {
-        modulos.map((mod, i) => (
-          <details class="group border-b border-line" open={i === 0} name="modulo">
-            <summary
-              class="flex cursor-pointer list-none items-center gap-4 py-6 sm:gap-6 [&::-webkit-details-marker]:hidden"
+        modulos.map((mod) => (
+          <li class="group relative flex flex-col overflow-hidden rounded-brand border border-line bg-white transition duration-300 ease-brand hover:-translate-y-1 hover:border-sky-400 hover:shadow-[0_18px_40px_-18px_rgba(10,42,64,0.35)]">
+            <div
+              class:list={[
+                'relative aspect-[4/3] overflow-hidden',
+                mod.fit === 'contain' ? 'bg-white' : 'bg-navy-800',
+              ]}
             >
-              <span class="grid size-9.5 shrink-0 place-items-center rounded-brand bg-navy-900 font-display text-sm font-semibold text-sky-400 transition-colors group-open:bg-blue-600 group-open:text-white">
+              <Image
+                src={mod.image}
+                alt={mod.alt}
+                widths={[360, 560]}
+                sizes="(min-width: 1024px) 280px, (min-width: 640px) 50vw, 100vw"
+                class:list={[
+                  'size-full transition-transform duration-500 ease-brand group-hover:scale-[1.04]',
+                  mod.fit === 'contain' ? 'object-contain p-5' : 'object-cover',
+                ]}
+                style={mod.position ? `object-position: ${mod.position}` : undefined}
+              />
+              {mod.fit !== 'contain' && (
+                <span class="absolute inset-0 bg-linear-to-t from-navy-900/45 via-transparent to-transparent" aria-hidden="true" />
+              )}
+              <span class="absolute top-3 left-3 grid size-9 place-items-center rounded-brand bg-navy-900 font-display text-[13px] font-semibold text-sky-400 transition-colors group-hover:bg-blue-600 group-hover:text-white">
                 {mod.num}
               </span>
-              <span class="flex-1">
-                <span data-mod-title class="block font-display text-[17px] font-semibold text-navy-900">
-                  {mod.title}
-                </span>
-                <span class="mt-1 hidden text-[13.5px] text-ink-soft sm:block sm:group-open:hidden">
-                  {mod.summary}
-                </span>
-              </span>
-              <span class="relative size-5.5 shrink-0" aria-hidden="true">
-                <span class="absolute top-1/2 left-1/2 h-0.5 w-3.5 -translate-x-1/2 -translate-y-1/2 bg-blue-600" />
-                <span class="absolute top-1/2 left-1/2 h-3.5 w-0.5 -translate-x-1/2 -translate-y-1/2 bg-blue-600 transition-transform duration-200 group-open:scale-y-0" />
-              </span>
-            </summary>
-
-            <div class="pb-8 pl-0 sm:pl-15">
-              {mod.intro && <p class="mb-3.5 text-[13.5px] text-ink-soft">{mod.intro}</p>}
-              <ul class="grid max-w-3xl gap-2.5">
-                {mod.items.map((item) => (
-                  <li class="relative pl-4.5 text-[14.5px] text-ink-soft">
-                    <span class="absolute top-2.5 left-0 size-1.5 bg-sky-400" aria-hidden="true" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-              <a
-                href="#contacto-form"
-                class="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-blue-600 hover:text-navy-800"
-                data-modulo={mod.slug}
-              >
-                Consultar por este módulo
-                <span aria-hidden="true">→</span>
-              </a>
             </div>
-          </details>
+
+            <div class="flex flex-1 flex-col border-t border-line p-5">
+              <h3 class="text-[16px] leading-snug font-semibold">{mod.title}</h3>
+              <p class="mt-2 flex-1 text-[13.5px] text-ink-soft">{mod.summary}</p>
+              <button
+                type="button"
+                class="mt-4 inline-flex items-center gap-2 self-start text-[13.5px] font-semibold text-blue-600 after:absolute after:inset-0 after:content-[''] group-hover:text-navy-800"
+                data-open-modulo={mod.slug}
+                aria-haspopup="dialog"
+              >
+                Ver servicios
+                <span aria-hidden="true" class="transition-transform group-hover:translate-x-1">→</span>
+              </button>
+            </div>
+          </li>
         ))
       }
-    </div>
+    </ul>
   </div>
+
+  {
+    modulos.map((mod) => (
+      <dialog
+        id={`modulo-${mod.slug}`}
+        class="modulo-dialog"
+        aria-labelledby={`modulo-${mod.slug}-title`}
+      >
+        <div class="grid md:grid-cols-[.8fr_1.2fr]">
+          <div
+            class:list={[
+              'relative h-52 md:h-auto',
+              mod.fit === 'contain' ? 'bg-white' : 'bg-navy-800',
+            ]}
+          >
+            <Image
+              src={mod.image}
+              alt=""
+              widths={[420, 720]}
+              sizes="(min-width: 768px) 370px, 100vw"
+              loading="lazy"
+              class:list={[
+                'absolute inset-0 size-full',
+                mod.fit === 'contain' ? 'object-contain p-8' : 'object-cover',
+              ]}
+              style={mod.position ? `object-position: ${mod.position}` : undefined}
+            />
+          </div>
+
+          <div class="relative p-7 sm:p-9">
+            <button
+              type="button"
+              class="absolute top-3 right-3 grid size-10 place-items-center rounded-brand text-ink-soft transition hover:bg-sky-50 hover:text-navy-900"
+              data-close-modulo
+              aria-label="Cerrar"
+            >
+              <svg viewBox="0 0 24 24" class="size-5" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="M6 6l12 12M18 6L6 18" />
+              </svg>
+            </button>
+
+            <span class="kicker">Módulo {mod.num}</span>
+            <p id={`modulo-${mod.slug}-title`} data-mod-title class="pr-8 font-display text-[clamp(1.25rem,2.6vw,1.5rem)] leading-tight font-semibold text-navy-900">
+              {mod.title}
+            </p>
+
+            {mod.intro && <p class="mt-4 text-[13.5px] text-ink-soft">{mod.intro}</p>}
+            <ul class="mt-5 grid gap-2.5">
+              {mod.items.map((item) => (
+                <li class="relative pl-4.5 text-[14px] text-ink-soft">
+                  <span class="absolute top-2.5 left-0 size-1.5 bg-sky-400" aria-hidden="true" />
+                  {item}
+                </li>
+              ))}
+            </ul>
+
+            <a href="#contacto-form" class="btn btn-solid mt-7" data-modulo={mod.slug}>
+              Consultar por este módulo
+              <span aria-hidden="true">→</span>
+            </a>
+          </div>
+        </div>
+      </dialog>
+    ))
+  }
 </section>
 
 <script>
-  // Al pedir "consultar por este módulo", precarga el motivo en el formulario.
+  document.querySelectorAll<HTMLButtonElement>('[data-open-modulo]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      document.querySelector<HTMLDialogElement>(`#modulo-${btn.dataset.openModulo}`)?.showModal();
+    });
+  });
+
+  document.querySelectorAll<HTMLDialogElement>('.modulo-dialog').forEach((dialog) => {
+    dialog.querySelector('[data-close-modulo]')?.addEventListener('click', () => dialog.close());
+    // cerrar al hacer clic en el fondo (fuera del contenido)
+    dialog.addEventListener('click', (e) => {
+      if (e.target === dialog) dialog.close();
+    });
+  });
+
+  // Al pedir "consultar por este módulo", cierra el modal y precarga el motivo en el formulario.
   document.querySelectorAll<HTMLAnchorElement>('[data-modulo]').forEach((link) => {
     link.addEventListener('click', () => {
-      const title = link.closest('details')?.querySelector('[data-mod-title]')?.textContent?.trim();
+      const dialog = link.closest('dialog');
+      const title = dialog?.querySelector('[data-mod-title]')?.textContent?.trim();
+      dialog?.close();
       const textarea = document.querySelector<HTMLTextAreaElement>('#comentarios');
       if (title && textarea && !textarea.value) {
         textarea.value = `Consulta sobre: ${title}.\n`;

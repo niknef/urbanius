@@ -1,6 +1,9 @@
 ---
+import { Image } from 'astro:assets';
 import { site, stats, whatsappHref } from '../data/site';
 import Icon from './Icon.astro';
+import portada from '../assets/brand/portada.jpg';
+import logo from '../assets/brand/logo-urbanus.png';
 ---
 
 <section class="relative overflow-hidden bg-linear-to-b from-navy-800 to-navy-900 text-white">
@@ -53,25 +56,44 @@ import Icon from './Icon.astro';
       </p>
     </div>
 
-    <div class="rounded-brand border border-white/15 bg-white/5 p-7 backdrop-blur-[2px]">
-      <img src={site.logo} alt={site.name} width="88" height="88" class="mb-5 h-22 w-22" />
-      <p class="text-sm text-[#CFE3F0]">
+    <div>
+      <figure class="relative">
+        <div class="relative overflow-hidden rounded-brand border border-white/15">
+          <Image
+            src={portada}
+            alt="Técnico realizando un trabajo en altura sobre un aerogenerador"
+            widths={[480, 582]}
+            sizes="(min-width: 1024px) 480px, 100vw"
+            loading="eager"
+            fetchpriority="high"
+            class="aspect-[4/3] w-full object-cover"
+          />
+          <div class="absolute inset-0 bg-linear-to-t from-navy-900 via-navy-900/40 to-transparent" aria-hidden="true"></div>
+
+          <dl class="absolute inset-x-0 bottom-0 flex p-5 sm:p-6">
+            {
+              stats.map((s, i) => (
+                <div class={`flex-1 ${i > 0 ? 'border-l border-white/20 pl-4' : ''}`}>
+                  <dt class="sr-only">{s.label}</dt>
+                  <dd>
+                    <b class="block font-display text-2xl text-sky-400">{s.value}</b>
+                    <span class="text-[12px] leading-tight text-[#CFE3F0]">{s.label}</span>
+                  </dd>
+                </div>
+              ))
+            }
+          </dl>
+        </div>
+
+        <div class="absolute top-4 left-4 rounded-brand bg-white p-3 shadow-2xl lg:-top-7 lg:-left-7 lg:p-3.5">
+          <Image src={logo} alt={site.name} width={220} loading="eager" class="h-auto w-20 lg:w-24" />
+        </div>
+      </figure>
+
+      <p class="mt-6 border-l-2 border-sky-400/60 pl-4 text-[13.5px] text-[#B9D3E5]">
         Dirección técnica a cargo de un Licenciado en Higiene y Seguridad con más de dos décadas en
         proyectos de generación eléctrica e industrias de alta complejidad.
       </p>
-      <dl class="mt-5 flex border-t border-white/15 pt-4.5">
-        {
-          stats.map((s, i) => (
-            <div class={`flex-1 ${i > 0 ? 'border-l border-white/15 pl-4.5' : ''}`}>
-              <dt class="sr-only">{s.label}</dt>
-              <dd>
-                <b class="block font-display text-2xl text-sky-400">{s.value}</b>
-                <span class="text-[12.5px] text-[#B9D3E5]">{s.label}</span>
-              </dd>
-            </div>
-          ))
-        }
-      </dl>
     </div>
   </div>
 </section>

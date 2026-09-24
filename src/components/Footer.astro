@@ -1,6 +1,8 @@
 ---
 import { site, contact, nav } from '../data/site';
+import { Image } from 'astro:assets';
 import Icon from './Icon.astro';
+import logo from '../assets/brand/logo-urbanus.png';
 
 const year = new Date().getFullYear();
 ---
@@ -9,10 +11,9 @@ const year = new Date().getFullYear();
   <div class="wrap">
     <div class="grid gap-10 border-b border-white/10 pb-11 lg:grid-cols-[1.3fr_1fr_1fr_1fr]">
       <div>
-        <div class="mb-4 flex items-center gap-3">
-          <img src={site.logo} alt="" width="36" height="36" class="h-9 w-9" />
-          <b class="font-display text-[15px] text-white">{site.name}</b>
-        </div>
+        <span class="mb-5 grid size-24 place-items-center rounded-brand bg-white p-2.5">
+          <Image src={logo} alt={site.name} width={180} class="size-full object-contain" />
+        </span>
         <p class="max-w-70 text-[13.5px] text-[#8FAEC2]">
           Consultoría integral en Calidad, Higiene, Seguridad y Medio Ambiente para empresas e
           industrias de alta complejidad.
@@ -20,7 +21,7 @@ const year = new Date().getFullYear();
       </div>
 
       <div>
-        <h2 class="mb-4 text-[13px] font-semibold tracking-wide text-white">Dirección técnica</h2>
+        <p class="mb-4 text-[13px] font-semibold tracking-wide text-white">Dirección técnica</p>
         <p class="mb-3 flex gap-2.5 text-[13.5px]">
           <Icon name="user" class="mt-0.5 size-4 shrink-0 text-sky-400" />
           {contact.lead.name}
@@ -32,7 +33,7 @@ const year = new Date().getFullYear();
       </div>
 
       <div>
-        <h2 class="mb-4 text-[13px] font-semibold tracking-wide text-white">Contacto</h2>
+        <p class="mb-4 text-[13px] font-semibold tracking-wide text-white">Contacto</p>
         <a href={`mailto:${contact.email}`} class="mb-3 flex gap-2.5 text-[13.5px] hover:text-white">
           <Icon name="mail" class="mt-0.5 size-4 shrink-0 text-sky-400" />
           {contact.email}
@@ -44,7 +45,7 @@ const year = new Date().getFullYear();
       </div>
 
       <div>
-        <h2 class="mb-4 text-[13px] font-semibold tracking-wide text-white">Secciones</h2>
+        <p class="mb-4 text-[13px] font-semibold tracking-wide text-white">Secciones</p>
         <ul class="grid gap-2.5 text-[13.5px]">
           {
             nav.map((item) => (

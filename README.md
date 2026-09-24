@@ -17,13 +17,13 @@ Seguridad y Medio Ambiente), construida con **Astro 7 + Tailwind CSS 4**. Sitio 
 src/
 ├── data/            ← TODO EL CONTENIDO EDITABLE (empezar acá)
 │   ├── site.ts          contacto, teléfono, mail, nav, stats, motivos del form
-│   ├── modulos.ts       los 6 módulos de servicio y sus ítems
+│   ├── modulos.ts       los 8 módulos de servicio: textos, imagen y alt
 │   ├── sectores.ts      sectores de cobertura
 │   └── metodologia.ts   los 4 pasos de "Cómo trabajamos"
 ├── components/
 │   ├── Header.astro         nav sticky + menú hamburguesa accesible
-│   ├── Hero.astro           banner con motivo de "plano técnico"
-│   ├── Modulos.astro        acordeón 01–06 (exclusivo, nativo con <details name>)
+│   ├── Hero.astro           banner con foto de portada, logo y stats
+│   ├── Modulos.astro        grilla de tarjetas 01–08 + detalle en <dialog> nativo
 │   ├── Certificaciones.astro tira ISO 9001 / 14001 / 45001
 │   ├── Metodologia.astro    sección agregada al guion original (ver más abajo)
 │   ├── Nosotros.astro       trayectoria + sectores de cobertura
@@ -32,11 +32,13 @@ src/
 │   ├── Flotantes.astro      panel de consulta rápida + botón de WhatsApp
 │   ├── LeadForm.astro       formulario reutilizable (pie y panel comparten lógica)
 │   └── SectionHead.astro / Icon.astro
+├── assets/            imágenes optimizadas por Astro (logo, portada, módulos)
 ├── lib/icons.ts         set de íconos inline (sin librería externa)
 ├── layouts/Base.astro   <head>, SEO, Open Graph, JSON-LD, scroll reveal
 ├── styles/global.css    tokens de marca (@theme) y clases base
 └── pages/
     ├── index.astro      orden de las secciones
+    ├── robots.txt.ts    robots.txt generado con el dominio de PUBLIC_SITE_URL
     └── 404.astro
 ```
 
@@ -76,9 +78,9 @@ Anti-spam ya incluido: honeypot (`website`) + validación en cliente.
 
 ## Antes de publicar
 
-- [ ] Reemplazar `public/urbanus-logo.svg` y `public/favicon.svg` por el logo original de la marca.
-- [ ] Regenerar `public/og-urbanus.png` (1200×630) con el logo real.
-- [ ] Dominio definitivo en `PUBLIC_SITE_URL` (`.env`) y en `public/robots.txt`.
+- [ ] Dominio definitivo en `PUBLIC_SITE_URL` (`.env`); canonical, OG, sitemap y robots.txt lo toman de ahí.
+- [ ] Dar de alta el sitio en Google Search Console y enviar `sitemap-index.xml`.
+- [ ] Crear / vincular el Perfil de Empresa de Google con la misma dirección y teléfono.
 - [ ] Mail con dominio propio en `src/data/site.ts` (hoy `contacto.urbanus@gmail.com`).
 - [ ] Definir destino de los leads (arriba).
 - [ ] Confirmar textos y CTAs con el cliente.

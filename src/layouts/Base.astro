@@ -11,7 +11,7 @@ interface Props {
 }
 
 const {
-  title = `${site.name} — Consultoría Integral en Calidad, Higiene, Seguridad y Medio Ambiente`,
+  title = site.title,
   description = site.description,
   noindex = false,
 } = Astro.props;
@@ -19,41 +19,83 @@ const {
 const canonical = new URL(Astro.url.pathname, Astro.site ?? site.url).toString();
 const ogImage = new URL(site.ogImage, Astro.site ?? site.url).toString();
 
+const base = Astro.site ?? site.url;
+const abs = (path: string) => new URL(path, base).toString();
+const orgId = abs('/#organizacion');
+
 const jsonLd = {
   '@context': 'https://schema.org',
-  '@type': 'ProfessionalService',
-  name: site.name,
-  description: site.description,
-  url: site.url,
-  image: ogImage,
-  logo: new URL(site.logo, Astro.site ?? site.url).toString(),
-  telephone: contact.phoneE164,
-  email: contact.email,
-  address: {
-    '@type': 'PostalAddress',
-    streetAddress: contact.address.street,
-    addressLocality: contact.address.city,
-    addressRegion: contact.address.region,
-    addressCountry: contact.address.country,
-  },
-  areaServed: { '@type': 'Country', name: 'Argentina' },
-  founder: { '@type': 'Person', name: contact.lead.name, jobTitle: contact.lead.role },
-  knowsAbout: [
-    'Higiene y Seguridad en el Trabajo',
-    'Salud Ocupacional',
-    'Gestión Ambiental',
-    'ISO 9001',
-    'ISO 14001',
-    'ISO 45001',
+  '@graph': [
+    {
+      '@type': 'ProfessionalService',
+      '@id': orgId,
+      name: site.name,
+      legalName: site.legalName,
+      description: site.description,
+      url: abs('/'),
+      image: abs(site.ogImage),
+      logo: abs(site.logo),
+      telephone: contact.phoneE164,
+      email: contact.email,
+      address: {
+        '@type': 'PostalAddress',
+        streetAddress: contact.address.street,
+        addressLocality: contact.address.city,
+        addressRegion: contact.address.region,
+        addressCountry: contact.address.country,
+      },
+      areaServed: { '@type': 'Country', name: 'Argentina' },
+      openingHoursSpecification: {
+        '@type': 'OpeningHoursSpecification',
+        dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+        opens: '09:00',
+        closes: '18:00',
+      },
+      contactPoint: {
+        '@type': 'ContactPoint',
+        contactType: 'customer service',
+        telephone: contact.phoneE164,
+        email: contact.email,
+        areaServed: 'AR',
+        availableLanguage: 'Spanish',
+      },
+      founder: { '@type': 'Person', name: contact.lead.name, jobTitle: contact.lead.role },
+      knowsAbout: [
+        'Higiene y Seguridad en el Trabajo',
+        'Salud Ocupacional',
+        'Medicina del Trabajo',
+        'Gestión Ambiental',
+        'Mediciones de higiene industrial',
+        'Capacitación en seguridad laboral',
+        'ISO 9001',
+        'ISO 14001',
+        'ISO 45001',
+        'Seguros empresariales',
+      ],
+      hasOfferCatalog: {
+        '@type': 'OfferCatalog',
+        name: 'Módulos de servicio',
+        itemListElement: modulos.map((m) => ({
+          '@type': 'Offer',
+          itemOffered: {
+            '@type': 'Service',
+            name: m.title,
+            description: m.summary,
+            provider: { '@id': orgId },
+            areaServed: 'AR',
+          },
+        })),
+      },
+    },
+    {
+      '@type': 'WebSite',
+      '@id': abs('/#sitio'),
+      url: abs('/'),
+      name: site.name,
+      inLanguage: 'es-AR',
+      publisher: { '@id': orgId },
+    },
   ],
-  hasOfferCatalog: {
-    '@type': 'OfferCatalog',
-    name: 'Módulos de servicio',
-    itemListElement: modulos.map((m) => ({
-      '@type': 'Offer',
-      itemOffered: { '@type': 'Service', name: m.title, description: m.summary },
-    })),
-  },
 };
 ---
 
@@ -65,9 +107,13 @@ const jsonLd = {
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
-    {noindex && <meta name="robots" content="noindex, nofollow" />}
+    <meta
+      name="robots"
+      content={noindex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large, max-snippet:-1'}
+    />
 
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon.png" type="image/png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <meta name="theme-color" content="#0A2A40" />
 
     <meta property="og:type" content="website" />
@@ -77,9 +123,17 @@ const jsonLd = {
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={ogImage} />
+    <meta property="og:image:type" content="image/png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={`${site.name} — ${site.tagline}`} />
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <meta name="geo.region" content="AR-C" />
+    <meta name="geo.placename" content="Ciudad Autónoma de Buenos Aires" />
 
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} is:inline />
   </head>

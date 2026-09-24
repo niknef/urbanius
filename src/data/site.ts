@@ -7,12 +7,15 @@ export const site = {
   name: 'URBANUS QHSE',
   legalName: 'URBANUS QHSE',
   tagline: 'Calidad · Higiene · Seguridad · Ambiente',
+  /** Título por defecto (~60 caracteres): marca + servicios más buscados + zona. */
+  title: 'URBANUS QHSE | Higiene y Seguridad, Medio Ambiente e ISO en CABA',
   description:
-    'Consultoría integral en Calidad, Higiene, Seguridad y Medio Ambiente. Ingeniería preventiva y gestión normativo-operativa para empresas e industrias de alta complejidad.',
+    'Consultoría en Higiene y Seguridad en el Trabajo, medicina laboral, medio ambiente, mediciones, capacitaciones e ISO 9001, 14001 y 45001 para empresas.',
   // TODO(cliente): reemplazar por el dominio definitivo.
   url: import.meta.env.PUBLIC_SITE_URL ?? 'https://urbanusqhse.com.ar',
   locale: 'es_AR',
-  logo: '/urbanus-logo.svg',
+  /** Logo cuadrado en /public: URL estable para buscadores (JSON-LD). */
+  logo: '/logo-urbanus.png',
   ogImage: '/og-urbanus.png',
 } as const;
 
@@ -50,7 +53,7 @@ export const nav = [
 
 export const stats = [
   { value: '22+', label: 'Años de trayectoria' },
-  { value: '6', label: 'Módulos de servicio' },
+  { value: '8', label: 'Módulos de servicio' },
   { value: '3', label: 'Normas ISO gestionadas' },
 ] as const;
 
@@ -61,5 +64,7 @@ export const motivosConsulta = [
   'Capacitaciones',
   'Mediciones y monitoreos',
   'Certificación ISO',
+  'Salud ocupacional / medicina laboral',
+  'Seguros y coberturas',
   'Otro',
 ] as const;
